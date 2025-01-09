@@ -1,0 +1,15 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t jrico/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run jrico/react-test npm test -- --coverage
+
+after_success:
+ - docker build -t jrico/multi-client ./client
+ -   docker build -t jrico/multi-nginx ./nginx 
+ - docker build -t jrico/multi-server ./server
+ -   docker build -t jrico/multi-worker ./worker 
